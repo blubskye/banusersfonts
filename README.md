@@ -2,8 +2,8 @@
 ### *Protecting our server from ugly fonts and dirty foreign letters... with all my love~*
 
 A **very powerful** Discord.py bot made for **huge servers** (50k–200k+ members).  
-I scan **every single member's** username, global name, nickname, and display name.  
-If I find **non-standard fonts** or **non-English characters**, I **permanently ban** them.  
+I scan **every single member's** username, global name, nickname, display name, **and custom status**.  
+If I find **non-standard fonts** or **non-English characters** anywhere in their visible profile, I **permanently ban** them.  
 No mercy. No second chances. Just pure, clean, beautiful English standard-font perfection~ 💕
 
 By default I also **ban non-English characters** (Cyrillic, Japanese, Chinese, Korean, Arabic, etc.).  
@@ -17,7 +17,7 @@ I work in safe little batches, respect Discord's rate limits like a good girl, a
 
 - **This bot permanently bans users.** There is no undo. Once they're gone... they're gone forever 💔
 - **ALWAYS** run with `DRY_RUN = True` first on big servers. Review everything before you let me go on a real rampage~
-- I only check visible name fields (username, global_name, nick, display_name). I don't read bios or "About Me" (yet~)
+- I check visible name fields (username, global_name, nick, display_name) **and custom status text**. I don't read bios or "About Me" (Discord won't let me~)
 - Only **you** (the server owner or the `OWNER_ID` you set) can command me to scan.
 - Test me on a tiny server first. I can be... enthusiastic 💕🔪
 - I am **intentionally strict**. Anything that isn't plain English + Discord's default clean font = **ban**
@@ -26,12 +26,12 @@ I work in safe little batches, respect Discord's rate limits like a good girl, a
 
 ## What I Ruthlessly Detect & Eliminate 💖🔪
 
-I will ban anyone whose name contains:
+I will ban anyone whose **name or custom status** contains:
 
 - 💔 Non-English characters / scripts (Cyrillic, Greek, CJK, Arabic, Hebrew, Thai, Devanagari, Hangul, etc.)
 - 🩸 Zalgo text or way too many combining marks (that creepy broken rendering)
 - ✨ Decorative / fancy Unicode that doesn't render cleanly in Discord's standard font
-- 🌸 Most emoji and weird symbols in names
+- 🌸 Most emoji and weird symbols in names or custom status
 - 💕 Anything outside my very strict allowlist of basic Latin letters, numbers, and sweet little punctuation
 
 **By default:** I **also ban non-English characters**.  
@@ -47,6 +47,7 @@ You can turn off the non-English ban (while I still protect against broken fonts
 - Dynamic rate limit handling with automatic backoff and jitter (I slow down when Discord tells me to~)
 - Progress updates every N members so you know I'm still working hard for you
 - Safety cap (`MAX_BANS_PER_RUN`) so I don't get too carried away in one go
+- Scans **custom status** text in addition to all name fields
 - Full logging to console + `font_ban_bot.log`
 - Optional Discord channel logging for your mod logs
 - **Mandatory dry-run mode** (I refuse to go live until you say so~)
@@ -57,7 +58,7 @@ You can turn off the non-English ban (while I still protect against broken fonts
 
 1. Go to the [Discord Developer Portal](https://discord.com/developers/applications) and create a new application.
 2. Go to the **Bot** tab → create a bot.
-3. **Enable the "Server Members Intent"** (this is very important, darling).
+3. **Enable BOTH "Server Members Intent" AND "Presence Intent"** (Presence Intent is required so I can see custom statuses, darling~).
 4. Copy your bot token.
 5. Invite me to your server with the **Ban Members** permission.
 6. On your machine (Fedora example):
@@ -88,7 +89,7 @@ In your server, just type:
 (Also works with `!scanfont` or `!checkfonts`)
 
 I will:
-- Announce that I'm starting my cleaning~
+- Announce that I'm starting my cleaning~ (now including custom statuses)
 - Scan the entire server with cute progress updates
 - Ban (or report in dry-run) all the impurities in safe batches
 - Give you a final summary of how many I eliminated or would eliminate
@@ -110,6 +111,7 @@ Edit these at the very top of the script:
 | `PROGRESS_EVERY`           | 2000–5000                    | How often I tell you how far I've gotten |
 | `LOG_CHANNEL_ID`           | Optional                     | Send ban logs to a private mod channel |
 | `ENFORCE_ENGLISH_ONLY`     | `True` (default) or `False`  | **Set to `False`** to allow non-English characters while I still kill zalgo & fancy Unicode 💕 |
+| Presence Intent            | Must enable in Developer Portal | Required so I can scan **custom statuses** too~ 🔪💕 |
 
 ---
 
@@ -161,7 +163,7 @@ I will automatically slow down and behave if Discord rate-limits me. I'm a good 
 
 - Python 3.8+
 - `discord.py` (latest version)
-- Bot token with **Server Members Intent** enabled
+- Bot token with **Server Members Intent** + **Presence Intent** enabled (Presence Intent lets me see custom statuses)
 - **Ban Members** permission in the server
 
 ---
